@@ -1,0 +1,100 @@
+import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const UpdateGrocery = ({setPopup}) => {
+     /*1st               9th-> Destructuring -> props */  
+
+    let gname = useRef();
+    let price = useRef();
+    let unit = useRef();
+    let image = useRef();
+    let desc = useRef();
+    let type = useRef();
+    let life = useRef();
+
+    let navigate = useNavigate();
+
+    let handleAddGrocery = (e)=>{
+        e.preventDefault();
+        let grocery = {
+            gname: gname.current.value,
+            price: price.current.value,
+            unit: unit.current.value,
+            image: image.current.value,
+            desc: desc.current.value,
+            type: type.current.value,
+            shelf_life: life.current.value
+        }
+        let config = {
+            method : "POST",
+            header : {"content-type":"xyz/json"},
+            body : JSON.stringify(grocery)
+        }
+        fetch("http://localhost:4000/groceries" , config)
+        .then(()=>{
+            toast.success("Data added successfuly to the DB")
+            setTimeout(()=>{ navigate("/")} , 3000)
+        })
+    }
+
+    return ( <div className="update-grocery-cont">
+                           {/* 1st */}
+                <h1>Update New Grocery</h1>
+                 {/* 1st */}
+                <form onSubmit={handleAddGrocery}>
+                    <div className="inp-grp">
+                        <label>Grocery Name</label>
+                        <input type="text" ref={gname} required/>
+                    </div>
+                    <div className="inp-grp">
+                        <label>Grocery Price</label>
+                        <input type="number" ref={price}/>
+                    </div>
+                    <div className="inp-grp">
+                        <label>Unit</label>
+                        <select ref={unit}>
+                            <option>--select--</option>
+                            <option value="1">l</option>
+                            <option value="ml">ml</option>
+                            <option value="g">g</option>
+                            <option value="kg">kg</option>
+                            <option value="piece">piece</option>
+                        </select>
+                    </div>
+                    <div className="inp-grp">
+                        <label>Grocery Image</label>
+                        <input type="url" ref={image}/>
+                    </div>
+                    <div className="inp-grp">
+                        <label>Grocery Description</label>
+                        <textarea name="" cols="20" rows="5" ref={desc}></textarea>
+                    </div>
+                    <div className="inp-grp">
+                        <label>Type</label>
+                        <select ref={type}>
+                            <option>--select--</option>
+                            <option value="fruit">fruit</option>
+                            <option value="vegetable">vegetable</option>
+                            <option value="dairy">dairy</option>
+                            <option value="Soft drink">Soft drink</option>
+                            <option value="snack">snack</option>
+                        </select>
+                    </div>
+                    <div className="inp-grp">
+                        <label>Shelf life</label>
+                        <input type="number" ref={life}/>
+                    </div>
+
+                    <input type="submit" value="update grocery"/> 
+                                            {/* 1st */}
+                </form>
+                <button onClick={()=>{setPopup(false)}} > close </button>
+                {/* 10th */}
+                <ToastContainer />
+            </div> );
+}
+ 
+export default UpdateGrocery;
+              /*1st */
